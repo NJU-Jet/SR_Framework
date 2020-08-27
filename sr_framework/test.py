@@ -29,7 +29,6 @@ def main():
     args = parser.parse_args()
     args = test_parse(args, lg)
     
-
     # create test dataloader
     test_dataset = create_dataset(args['datasets']['test'])
     test_loader = create_loader(test_dataset, args['datasets']['test'])
@@ -44,6 +43,12 @@ def main():
     state_dict = torch.load(args['networks']['pretrained'])
     lg.info('Load pretrained from: [{}]'.format(args['networks']['pretrained']))
     model.load_state_dict(state_dict)
+    
+    # calculate cuda time
+    if args['calc_cuda_time']:
+        lg.info('Start calculating cuda time...')
+        avg_test_time = calc_cuda_time(test_loader, model)
+        lg.info('Average cuda time: [{:.5f}]'.format(avg_test_time))
     
     # Test
     print('\n', '-'*pn, 'Testing {}'.format(args['dataset_name']), '-'*pn)

@@ -1,4 +1,5 @@
 import logging
+import torch
 import cv2
 import math
 import os
@@ -274,6 +275,43 @@ def Frequency_analysis(image):
     x = x / max_freq
     
     return x, y
+
+
+def calc_cuda_time(val_loader, model):
+    test_times = 0.0
+    model.eval()
+
+    # start testing time
+    test_times = 0
+
+    pbar_time = ProgressBar(5)
+    for i in range(5):
+        test_time = sr_forward_time(val_loader, model)
+        test_times += test_time
+        pbar_time.update('')
+    avg_test_time = (test_times / 5) / len(val_loader)
+    return avg_test_time
+
+
+def sr_forward_time(dataloader, model):
+    cuda_time = 0.0
+    device = 'cuda' if torch.cuda.is_available() eles 'cpu'
+    for i, data in enumerate(dataloader):
+        lr_imgs = data['LR'].to(device)
+
+        start_event = torch.cuda.Event(enable_timing=True)
+        end_event = torch.cuda.Event(enable_timing=True)
+        start_event.record()
+        with torch.no_grad():
+            sr_imgs = model(lr_imgs)
+        end_event.record()
+
+        torch.cuda.synchronize(device)
+
+        cuda_time += start_event.elapsed_time(end_event)
+
+    return cuda_time
+
 
 if __name__ == '__main__':
     dataroot = '/data/dzc/SISRDataset/DIV2K/DIV2K_train_HR'

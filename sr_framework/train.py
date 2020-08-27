@@ -73,9 +73,6 @@ def main():
                 
     # create solver
     solver = create_solver(args)
-    if args['calc_cuda_time']:
-        lg.info('Start testing time...')
-        solver.calc_cuda_time(val_loader)
 
     # training prepare
     solver_log = solver.get_current_log()

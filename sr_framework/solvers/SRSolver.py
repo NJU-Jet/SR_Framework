@@ -13,8 +13,6 @@ import torchvision.utils as thutil
 import imageio
 import pandas as pd
 from shutil import get_terminal_size
-sys.path.append('../')
-from utils import ProgressBar
 
 class SRSolver(BaseSolver):
     def __init__(self, opt):
@@ -185,71 +183,7 @@ class SRSolver(BaseSolver):
             self.val_records = ckp['val_records']
             self.scheduler.load_state_dict(ckp['lr_scheduler'])
 
-    def calc_time(self, val_loader):
-        test_times = 0.0
-        self.model.eval()
-
-        # load baseline
-        self.baseline_model = baseline.model().to(self.device)
-        self.baseline_model.eval()
-
-        # start testing time
-        time_scores = 0
-        test_times = 0
-        baseline_times = 0
-
-        pbar_time = ProgressBar(5)
-        for i in range(5):
-            test_time = self.sr_forward_time(val_loader, self.model)
-            test_times += test_time
-            baseline_time = self.sr_forward_time(val_loader, self.baseline_model)
-            baseline_times += baseline_time
-            pbar_time.update('')
-
-        avg_test_time = (test_times / 5) // 100
-        avg_baseline_time = (baseline_times / 5) // 100
-        avg_time_score = 1.2 * ((avg_baseline_time - avg_test_time) / avg_baseline_time)
-        self.lg.info('current_model: [{:.4f}ms], baseline: [{:.4f}ms], time_score: [{:.4f}'.format(avg_test_time*100, avg_baseline_time*100, avg_time_score))
-
-        self.model.train()
         
-    def calc_cuda_time(self, val_loader):
-        test_times = 0.0
-        self.model.eval()
-
-        # start testing time
-        time_scores = 0
-        test_times = 0
-
-        pbar_time = ProgressBar(5)
-        for i in range(5):
-            test_time = self.sr_forward_time(val_loader)
-            test_times += test_time
-            pbar_time.update('')
-        avg_test_time = (test_times / 5) / len(val_loader)
-        self.lg.info('Avg cuda time: [{:.5f}]'.format(avg_test_time))
-
-        self.model.train()
-
-    def sr_forward_time(self, dataloader):
-        cuda_time = 0.0
-       
-        for i, data in enumerate(dataloader):
-            lr_imgs = data['LR'].to(self.device)
-
-            start_event = torch.cuda.Event(enable_timing=True)
-            end_event = torch.cuda.Event(enable_timing=True)
-            start_event.record()
-            with torch.no_grad():
-                sr_imgs = self.model(lr_imgs)
-            end_event.record()
-
-            torch.cuda.synchronize(self.device)
-
-            cuda_time += start_event.elapsed_time(end_event)
-
-        return cuda_time
-
     def save_checkpoint(self, epoch, is_best):
         filename = osp.join(self.ckp_path, '{}_ckp.pth'.format(epoch))
         ckp = {
