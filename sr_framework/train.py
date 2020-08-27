@@ -19,6 +19,12 @@ def main():
     parser = argparse.ArgumentParser(description='Arguments')
     parser.add_argument('--opt', type=str, required=True, help='path to json or yaml file')
     parser.add_argument('--name', type=str, required=True, help='save_dir prefix name')
+    parser.add_argument('--scale', type=int, default=2)
+    parser.add_argument('--ps', type=int, default=128, help='patch size')
+    parser.add_argument('--bs', type=int, default=16, help='batch_size')
+    parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
+    parser.add_argument('--train_Y', action='store_true', default=False, help='convert rgb to yuv and only train on Y channel')
+
     args = parser.parse_args()
     args, lg = parse(args)
 

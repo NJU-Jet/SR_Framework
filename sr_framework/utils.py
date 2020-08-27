@@ -295,7 +295,7 @@ def calc_cuda_time(val_loader, model):
 
 def sr_forward_time(dataloader, model):
     cuda_time = 0.0
-    device = 'cuda' if torch.cuda.is_available() eles 'cpu'
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
     for i, data in enumerate(dataloader):
         lr_imgs = data['LR'].to(device)
 

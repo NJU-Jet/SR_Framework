@@ -8,6 +8,8 @@ def create_dataset(opt):
         from .LRDataset import LR as D
     elif opt['mode'] == 'Benchmark':
         from .Benchmark import Benchmark as D
+    elif opt['mode'] == 'DIV2K':
+        from .DIV2KDataset import DIV2KDataset as D
     else:
         raise NotImplementedError('{} Dataset is not implemented yet!'.format(opt['mode']))
     return D(opt)

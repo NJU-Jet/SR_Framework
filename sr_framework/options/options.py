@@ -15,18 +15,33 @@ def parse(opt):
     with open(path, 'r') as fp:        
         args = yaml.full_load(fp.read())
     lg = logger(name, 'log/{}.log'.format(name), args['solver']['pretrained'])
-    
+        
+    # general settings
+    args['name'] = name
+    args['scale'] = opt.scale
+    args['train_Y'] = opt.train_Y
+
     # setting for datasets
-    scale = args['scale']
-    ps = args['patch_size']    
+    scale = opt.scale
        
     for phase, dataset_opt in args['datasets'].items():
         dataset_opt['scale'] = scale
         dataset_opt['split'] = phase
-        dataset_opt['patch_size'] = ps
+        dataset_opt['patch_size'] = opt.ps
+        dataset_opt['batch_size'] = opt.bs
+        dataset_opt['train_Y'] = opt.train_Y
+        if 'DIV2K' in dataset_opt['dataroot_LR']:
+            dataset_opt['dataroot_LR'] = dataset_opt['dataroot_LR'].replace('N', str(opt.scale))        
 
     # setting for networks
     args['networks']['upscale_factor'] = scale
+    if opt.train_Y:
+        args['networks']['in_channels'] = 1
+        args['networks']['out_channels'] = 1
+
+    # setting for solver
+    args['solver']['learning_rate'] = opt.lr
+    
       
     # setting for GPU environment
     if args['gpu_ids'] is None:
@@ -37,7 +52,6 @@ def parse(opt):
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu_list    
 
     # create directories for paths
-    args['name'] = name
     pretrained = args['solver']['pretrained']
 
     root = osp.join(args['paths']['experiment_root'], name)

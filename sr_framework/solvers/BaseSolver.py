@@ -10,6 +10,7 @@ class BaseSolver(object):
         self.opt = opt
         self.ps = opt['patch_size']
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.train_Y = opt['train_Y']
 
         # skip unstable batch for stable training
         self.last_epoch_loss = 1e8
@@ -37,14 +38,10 @@ class BaseSolver(object):
 
         width = 360
         height = 240
-        
+        in_channels = 1 if self.train_Y else 3  
         # count GFlops
-        inputs = torch.randn(1, 3, height, width).to(self.device)
+        inputs = torch.randn(1, in_channels, height, width).to(self.device)
         macs = profile(self.model, inputs)
-        print('{:.4f} G'.format(macs / 1e9))
-        if (macs/1e9)>2.0:
-            print('model GFLOPs is more than 2\n')
-            exit(-1)
 
         return count, macs
 

@@ -1,35 +1,36 @@
 #generate settings
+name: ~
 mode: SR
-#use_cl: true
-gpu_ids: [3]
+gpu_ids: [0]
 
 scale: 2
 patch_size: 128
+train_Y: false
 
 #datasets
 datasets:
   train:
-    mode: LRHR
-    dataroot_HR: ../agora_train/train/HR
-    dataroot_LR: ../agora_train/train/LR
-    filename_path: ../agora_train/train/train.txt
+    mode: DIV2K
+    dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
+    dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
+    filename_path: data/DIV2K_train.txt
     n_workers: 4
     batch_size: 16
     use_flip: true
     use_rot: true
     noise: ~
   val:
-    mode: LRHR
-    dataroot_HR: ../agora_train/train/HR
-    dataroot_LR: ../agora_train/train/LR
-    filename_path: ../agora_train/train/val.txt
+    mode: DIV2K
+    dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
+    dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
+    filename_path: data/DIV2K_val.txt
     noise: ~
 
 #networks
 networks:
   which_model: baseline
   in_channels: 3
-  num_fea: 12
+  num_fea: 64
   out_channels: 3
   dataparallel: false
       
@@ -58,12 +59,9 @@ solver:
   manual_seed: 0
   num_epochs: 1000
   skip_threshold: 3
-  #split_batch: 2
-  save_vis_step: 50 
+  save_vis_step: 100
   val_step: 50
   pretrained: ~
-  #../SRFBN_CVPR19/models/SRFBN_x2_BI.pth
-  cl_weights: [1.0, 1.0, 1.0, 1.0]
 
 #print
 print:

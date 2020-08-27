@@ -8,11 +8,10 @@ import logging
 import sys
 sys.path.append('../')
 from utils import rgb2ycbcr
-lg = logging.getLogger('Base')
 
-class LRHR(Base):
+class DIV2KDataset(Base):
     def __init__(self, opt):
-        super(LRHR, self).__init__(opt)
+        super(DIV2KDataset, self).__init__(opt)
         self.dataroot_hr = opt['dataroot_HR']   
         self.dataroot_lr = opt['dataroot_LR']
         self.filename_path = opt['filename_path']
@@ -36,15 +35,17 @@ class LRHR(Base):
 
     def __getitem__(self, idx):
         hr_path = osp.join(self.dataroot_hr, self.img_list[idx])
-        lr_path = osp.join(self.dataroot_lr, self.img_list[idx])
+        base, ext = osp.splitext(self.img_list[idx])
+        lr_basename = base + 'x{}'.format(self.scale) + ext
+        lr_path = osp.join(self.dataroot_lr, lr_basename)
         hr = np.array(Image.open(hr_path))
         lr = np.array(Image.open(lr_path))
 
         if self.noise is not None:
             lr = self.add_noise(lr, self.noise['type'], self.noise['value'])
         if self.train_Y:
-            lr = rgb2ycbcr(lr)
-            hr = rgb2ycbcr(hr)
+            lr = rgb2ycbcr(lr)[:, :, np.newaxis]
+            hr = rgb2ycbcr(hr)[:, :, np.newaxis]
 
         data = {}
         if self.split == 'train':
