@@ -1,0 +1,17 @@
+#generate settings
+mode: SR
+gpu_ids: [0]
+scale: 2
+dataset_name: ~
+   
+#datasets
+datasets:
+  test:
+    mode: Benchmark
+    dataroot_HR: /data/dzc/SISRDataset/benchmark/dataset_name/HR
+    dataroot_LR: /data/dzc/SISRDataset/benchmark/dataset_name/LR_bicubic/XN
+    
+#networks
+networks:
+  which_model: baseline
+  pretrained: ~
