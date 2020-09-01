@@ -18,9 +18,10 @@ class SRSolver(BaseSolver):
     def __init__(self, opt):
         super(SRSolver, self).__init__(opt)
         self.lg = logging.getLogger(opt['name'])
-        self.is_train = opt['is_train']
         self.train_opt = opt['solver']
         self.scale = opt['scale']
+        self.use_chop = opt['use_chop']
+        self.lg.info('use split forward in test phase: [{}]'.format(self.use_chop))
 
         self.train_records = {
             'train_loss': [],
@@ -55,20 +56,24 @@ class SRSolver(BaseSolver):
         # set optimizer
         optim_type = self.train_opt['type']
         lr = self.train_opt['learning_rate']
+        weight_decay = train_opt['weight_decay']
         if optim_type == 'ADAM':
-            self.optimizer = optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()), lr=lr)
+            self.optimizer = optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()), lr=lr, weight_decay=weight_decay)
         elif optim_type == 'SGD':
-            self.optimizer = optim.SGD(filter(lambda p: p.requires_grad, self.model.parameters()), lr=lr, momentum=0.9)
+            self.optimizer = optim.SGD(filter(lambda p: p.requires_grad, self.model.parameters()), lr=lr, momentum=0.9, weight_decay=weight_decay)
         else:
             raise NotImplementedError('Optimizer type [{}] is not implemented!'.format(optim))
         self.lg.info('Optimizer: [{}], lr: [{}]'.format(optim_type, lr))
 
         # set lr_scheduler
         scheduler = self.train_opt['lr_scheme']
+        self.scheduler_name = scheduler
         steps = self.train_opt['lr_steps']
         lr_gamma = self.train_opt['lr_gamma']
         if scheduler == 'MultiStepLR':
             self.scheduler = optim.lr_scheduler.MultiStepLR(self.optimizer, steps, lr_gamma)
+        elif scheduler == 'ReduceLROnPlateau':
+            self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=5)
         else:
             raise NotImplementedError('lr_scheduler type [{}] is not implemented!'.format(scheduler))
         self.lg.info('Scheduler: [{}], steps: {}, gamma: [{}]'.format(scheduler, steps, lr_gamma)) 
@@ -96,6 +101,7 @@ class SRSolver(BaseSolver):
         loss = 0.0
         outputs = self.model(self.LR)
         loss = self.criterion(outputs, self.HR)
+        self.loss = loss.item()
 
         loss.backward()
 
@@ -113,8 +119,10 @@ class SRSolver(BaseSolver):
     def test(self):
         self.model.eval()
         with torch.no_grad():
-            #self.SR = self.split_forward(self.LR)
-            self.SR = self.model(self.LR)
+            if self.use_chop:
+                self.SR = self.split_forward(self.LR)
+            else:
+                self.SR = self.model(self.LR)
             
         self.model.train()
         loss = self.criterion(self.SR, self.HR)
@@ -196,8 +204,9 @@ class SRSolver(BaseSolver):
             'train_records': self.train_records,
             'val_records': self.val_records
         }
-        torch.save(ckp, filename)
-        self.lg.info('Saving last checkpoint to [{}]'.format(filename))
+        if epoch % self.save_ckp_step:
+            torch.save(ckp, filename)
+            self.lg.info('Saving last checkpoint to [{}]'.format(filename))
 
         if is_best:
             filename = osp.join(self.ckp_path, 'best.pth')
@@ -236,7 +245,10 @@ class SRSolver(BaseSolver):
 
     
     def update_learning_rate(self, epoch):
-        self.scheduler.step()
+        if self.scheduler_name == 'ReduceLROnPlateau':
+            self.scheduler.step(self.loss)
+        else:    
+            self.scheduler.step()
        
     
     def get_current_log(self):

@@ -20,6 +20,7 @@ def parse(opt):
     args['name'] = name
     args['scale'] = opt.scale
     args['train_Y'] = opt.train_Y
+    args['use_chop'] = opt.use_chop
 
     # setting for datasets
     scale = opt.scale
@@ -44,8 +45,8 @@ def parse(opt):
     
       
     # setting for GPU environment
-    if args['gpu_ids'] is None:
-        gpu_list = ''
+    if opt.gpu_ids is not None:
+        gpu_list = opt.gpu_ids
     else:
         gpu_list = ','.join([str(x) for x in args['gpu_ids']])
     lg.info('Available gpus: {}'.format(gpu_list))

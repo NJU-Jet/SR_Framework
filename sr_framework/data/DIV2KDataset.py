@@ -22,6 +22,7 @@ class DIV2KDataset(Base):
         self.split = opt['split']
         self.noise = opt['noise']
         self.train_Y = opt['train_Y']
+        self.enlarge_times = opt['enlarge_times']
 
         self.img_list = []        
         with open(self.filename_path, 'r') as f:
@@ -31,9 +32,11 @@ class DIV2KDataset(Base):
 
         
     def __len__(self):
-        return len(self.img_list)
+        return len(self.img_list) * self.enlarge_times
+
 
     def __getitem__(self, idx):
+        idx = idx % len(self.img_list)
         hr_path = osp.join(self.dataroot_hr, self.img_list[idx])
         base, ext = osp.splitext(self.img_list[idx])
         lr_basename = base + 'x{}'.format(self.scale) + ext

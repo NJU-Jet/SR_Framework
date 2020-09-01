@@ -24,6 +24,8 @@ def main():
     parser.add_argument('--bs', type=int, default=16, help='batch_size')
     parser.add_argument('--lr', type=float, default=1e-3, help='learning rate')
     parser.add_argument('--train_Y', action='store_true', default=False, help='convert rgb to yuv and only train on Y channel')
+    parser.add_argument('--gpu_ids', type=str, default=None, help='which gpu to use')
+    parser.add_argument('--use_chop', action='store_true', default=False, help='whether to use split_forward in test phase')
 
     args = parser.parse_args()
     args, lg = parse(args)

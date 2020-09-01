@@ -24,6 +24,7 @@ class BaseSolver(object):
         
         # log and visual scheme
         self.save_visual_step = opt['solver']['save_vis_step']
+        self.save_ckp_step = opt['solver']['save_ckp_step']
         
         self.best_epoch = 0
         self.cur_epoch = 0

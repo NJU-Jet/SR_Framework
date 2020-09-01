@@ -25,6 +25,8 @@ def parse(opt, lg):
 
     # setting for networks
     args['networks']['upscale_factor'] = scale
+    args['networks']['which_model'] = opt.which_model
+    args['networks']['pretrained'] = opt.pretrained
       
     # setting for GPU environment
     if args['gpu_ids'] is None:

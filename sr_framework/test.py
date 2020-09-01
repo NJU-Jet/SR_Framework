@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--opt', type=str, required=True, help='path to test yaml file')
     parser.add_argument('--dataset_name', type=str, default=None)
     parser.add_argument('--scale', type=int, required=True)
+    parser.add_argument('--which_model', type=str, required=True, help='which pretrained model')
+    parser.add_argument('--pretrained', type=str, required=True, help='pretrain path')
 
     args = parser.parse_args()
     args = test_parse(args, lg)

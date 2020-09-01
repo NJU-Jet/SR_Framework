@@ -28,7 +28,7 @@ def logger(name, filepath, pretrained=None):
 
     lg = logging.getLogger(name)
     lg.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s | %(filename)s[%(lineno)d] - %(message)s', datefmt='%H:%M:%S')
+    formatter = logging.Formatter('%(asctime)s | %(filename)s[%(lineno)d] | %(message)s', datefmt='%H:%M:%S')
     stream_hd = logging.StreamHandler()
     stream_hd.setFormatter(formatter)
     lg.addHandler(stream_hd)
