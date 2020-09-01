@@ -1,0 +1,77 @@
+#generate settings
+name: ~
+mode: SR
+gpu_ids: [0]
+
+scale: 2
+patch_size: 96
+train_Y: false
+use_chop: true
+
+#datasets
+datasets:
+  train:
+    mode: DIV2K
+    dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
+    dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
+    filename_path: data/DIV2K_train.txt
+    n_workers: 4
+    batch_size: 16
+    use_flip: true
+    use_rot: true
+    noise: ~
+    enlarge_times: 20
+  val:
+    mode: DIV2K
+    dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
+    dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
+    filename_path: data/DIV2K_val.txt
+    noise: ~
+    enlarge_times: 1
+
+#networks
+networks:
+  which_model: LapSRN
+  in_channels: 3
+  num_fea: 64
+  out_channels: 3
+  dataparallel: false
+      
+#path to save
+paths:
+  experiment_root: ./experiment
+  root: ~ # determined by model_name
+  epochs: ~ 
+  visual: ~ 
+  records: ~
+
+#optimizer
+solver:
+  type: ADAM
+  init_type: kaiming
+  learning_rate: !!float 1e-5
+  weight_decay: 0
+  lr_scheme: MultiStepLR
+  lr_steps: 
+    - 100
+    - 200
+    - 300
+    - 400
+    - 500
+    - 600
+    - 700
+    - 800
+    - 900
+  lr_gamma: !!float 0.5
+  loss_type: l1
+  manual_seed: 0
+  num_epochs: 1000
+  skip_threshold: 3
+  save_vis_step: 100
+  save_ckp_step: 100
+  val_step: 1
+  pretrained: ~
+
+#print
+print:
+  print_freq: 50
