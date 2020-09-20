@@ -3,7 +3,7 @@
 This directory contains some helpful functions which prodeuce figures needed in article.
 * generate\_best: Compare your method with other methods and visualize the best patches. The img dirs should be organized like:
     * HR:
-        - {yout_img_name}.jpg
+        - {your_img_name}.jpg
         - ...
     * BICUBIC:
         - {your_img_name}.jpg
@@ -23,3 +23,4 @@ This directory contains some helpful functions which prodeuce figures needed in 
 * feature\_map: Visualize feature map.(average feature maps along channel axis)
 
 ![](feature_map.jpg')
+
