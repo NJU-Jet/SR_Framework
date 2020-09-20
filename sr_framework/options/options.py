@@ -10,11 +10,11 @@ from utils import logger
 import shutil
 
 def parse(opt):
-    path, name = opt.opt, opt.name
+    path, name, pretrained = opt.opt, opt.name, opt.pretrained
     
     with open(path, 'r') as fp:        
         args = yaml.full_load(fp.read())
-    lg = logger(name, 'log/{}.log'.format(name), args['solver']['pretrained'])
+    lg = logger(name, 'log/{}.log'.format(name), pretrained)
         
     # general settings
     args['name'] = name
@@ -31,7 +31,7 @@ def parse(opt):
         dataset_opt['patch_size'] = opt.ps
         dataset_opt['batch_size'] = opt.bs
         dataset_opt['train_Y'] = opt.train_Y
-        if 'DIV2K' in dataset_opt['dataroot_LR']:
+        if ('DIV2K' in dataset_opt['dataroot_LR']) or ('benchmark' in dataset_opt['dataroot_LR']):
             dataset_opt['dataroot_LR'] = dataset_opt['dataroot_LR'].replace('N', str(opt.scale))        
 
     # setting for networks
@@ -51,9 +51,12 @@ def parse(opt):
         gpu_list = ','.join([str(x) for x in args['gpu_ids']])
     lg.info('Available gpus: {}'.format(gpu_list))
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu_list    
+    if ',' in gpu_list:
+        args['networks']['dataparallel'] = True
+        lg.info('Using Dataparallel')
 
     # create directories for paths
-    pretrained = args['solver']['pretrained']
+    args['solver']['pretrained'] = pretrained
 
     root = osp.join(args['paths']['experiment_root'], name)
     args['paths']['root'] = root
