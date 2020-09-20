@@ -13,7 +13,7 @@
 
 ## Implement some useful functions for article figures. Like the following:
 
-* **1. generate\_best**: Compare your method with other methods and visualize the best patches.
+* **1. generate\_best**: Automatically compare your method with other methods and visualize the best patches.
 
 ![compare.jpg](sr_framework/article_helper/compare.jpg)
 
