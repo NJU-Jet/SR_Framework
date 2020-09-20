@@ -14,6 +14,7 @@
 ## Implement some useful functions for article figures. Like the following:
 
 * **1. generate\_best**: Compare your method with other methods and visualize the best patches.
+
 ![compare.jpg](sr_framework/article_helper/compare.jpg)
 
 * **2. Frequency\_analysis**: Convert an image to 1-D spectral densities.
