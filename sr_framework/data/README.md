@@ -1,4 +1,4 @@
-** About different dataset **
+**About different dataset**
 * BaseDataset: Common functions for preprocessing data.
     * np2tensor: Convert numpy data from HWC[0: 255] to CHW[0: 1].
     * augment: Randomly vertical flip, horizontal flip and 90 rorate data. 
