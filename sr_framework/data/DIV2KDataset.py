@@ -2,12 +2,15 @@ from .BaseDataset import Base
 import numpy as np
 import os
 import os.path as osp
-import torchvision.transforms as T
 from PIL import Image
 import logging
 import sys
 sys.path.append('../')
 from utils import rgb2ycbcr
+
+'''
+Train or validate for DIV2Kdataset
+'''
 
 class DIV2KDataset(Base):
     def __init__(self, opt):
@@ -58,4 +61,5 @@ class DIV2KDataset(Base):
         
         data['LR'] = lr
         data['HR'] = hr
+
         return data

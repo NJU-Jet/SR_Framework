@@ -14,7 +14,7 @@ class Base(data.Dataset):
     def __getitem__(self):
         pass
 
-    # numpy HWC -> tensor CHW
+    # numpy HWC[0:255] -> tensor CHW[0,1], different from EDSR framework.
     def np2tensor(self, img):
         img = img.transpose(2, 0, 1)
         img = torch.from_numpy(img).float() / 255.
