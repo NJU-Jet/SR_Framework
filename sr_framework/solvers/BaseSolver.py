@@ -37,8 +37,8 @@ class BaseSolver(object):
     def count_parameters(self, network):
         count = sum([x.numel() for x in network.parameters()])
 
-        width = 360
-        height = 240
+        width = 720 // self.scale
+        height = 1280 // self.scale
         in_channels = 1 if self.train_Y else 3  
         # count GFlops
         inputs = torch.randn(1, in_channels, height, width).to(self.device)

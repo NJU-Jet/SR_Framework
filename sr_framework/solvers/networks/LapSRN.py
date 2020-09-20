@@ -22,7 +22,7 @@ class FeatureExtraction(nn.Module):
             fea_conv.append(nn.Conv2d(num_fea, num_fea, 3, 1, 1))
         self.fea_conv = nn.Sequential(*fea_conv)
 
-        self.upconv = nn.Transpose2d(num_fea, num_fea, kernel, padding, stride)
+        self.upconv = nn.ConvTranspose2d(num_fea, num_fea, kernel, stride, padding)
         self.act = nn.LeakyReLU(negative_slope=0.2)
 
     def forward(self, x):
@@ -60,7 +60,7 @@ class ImageReconstruction(nn.Module):
 class LapSRN(nn.Module):
     def __init__(self, upscale_factor, in_channels=3, num_fea=64, out_channels=3):
         super(LapSRN, self).__init__()
-        upscale_factor_level = 2 if upscale_factor==4 # support x2, x3, x4
+        upscale_factor_level = 2 if upscale_factor==4 else upscale_factor
 
         self.feature_extraction1 = FeatureExtraction(upscale_factor_level, in_channels, num_fea)
         self.image_reconstruction1 = ImageReconstruction(upscale_factor_level, num_fea, out_channels)

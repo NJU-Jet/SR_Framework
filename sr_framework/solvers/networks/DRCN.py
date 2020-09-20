@@ -26,7 +26,7 @@ class DRCN(nn.Module):
         self.reconstruct = nn.Sequential(
             nn.Conv2d(num_fea, num_fea, 3, 1, 1),
             nn.ReLU(True),
-            nn.Conv2d(num_fea, out_channels, 3, 1, 1)
+            nn.Conv2d(num_fea, out_channels, 3, 1, 1),
             nn.ReLU(True)
         )
 

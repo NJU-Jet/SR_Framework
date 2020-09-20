@@ -3,22 +3,22 @@ import torch.nn as nn
 from .blocks import MeanShift, IMDN_Module
 
 class IMDN(nn.Module):
-    def __init__(self, upscale_factor=2, in_channels=3, num_fea=64, out_channels=3, imdn_blocks=6, skip=True):
+    def __init__(self, upscale_factor=4, in_channels=3, num_fea=64, out_channels=3, imdn_blocks=6):
         super(IMDN, self).__init__()
         
-        self.sub_mean = MeanShift()
-        self.add_mean = MeanShift(sign=1)
+        #self.sub_mean = MeanShift()
+        #self.add_mean = MeanShift(sign=1)
 
         # extract features
         self.fea_conv = nn.Conv2d(in_channels, num_fea, 3, 1, 1)
     
         # map
-        self.IMDN1 = IMDN_Module(num_fea, skip)
-        self.IMDN2 = IMDN_Module(num_fea, skip)
-        self.IMDN3 = IMDN_Module(num_fea, skip)
-        self.IMDN4 = IMDN_Module(num_fea, skip)
-        self.IMDN5 = IMDN_Module(num_fea, skip)
-        self.IMDN6 = IMDN_Module(num_fea, skip)
+        self.IMDN1 = IMDN_Module(num_fea)
+        self.IMDN2 = IMDN_Module(num_fea)
+        self.IMDN3 = IMDN_Module(num_fea)
+        self.IMDN4 = IMDN_Module(num_fea)
+        self.IMDN5 = IMDN_Module(num_fea)
+        self.IMDN6 = IMDN_Module(num_fea)
 
         self.fuse = nn.Sequential(
             nn.Conv2d(num_fea * imdn_blocks, num_fea, 1, 1, 0),
@@ -33,7 +33,7 @@ class IMDN(nn.Module):
         )
    
     def forward(self, x):
-        x = self.sub_mean(x)
+        #x = self.sub_mean(x)
 
         # extract features
         x = self.fea_conv(x)
@@ -50,6 +50,6 @@ class IMDN(nn.Module):
 
         # reconstruct
         out = self.upsampler(out)
-        out = self.add_mean(out)
+        #out = self.add_mean(out)
 
         return out

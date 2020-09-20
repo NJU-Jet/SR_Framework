@@ -17,9 +17,9 @@ class DRRN(nn.Module):
         # body: recurisive conv
         self.body = nn.Sequential(
             nn.Conv2d(num_fea, num_fea, 3, 1, 1),
+            nn.BatchNorm2d(num_fea),
             nn.ReLU(True),
             nn.Conv2d(num_fea, num_fea, 3, 1, 1),
-            nn.ReLU(True)
         )
 
         # reconstruction
@@ -30,6 +30,7 @@ class DRRN(nn.Module):
 
     def forward(self, x):
         x = F.interpolate(x, scale_factor=self.upscale_factor, mode='bicubic', align_corners=False)
+        identity = x
         # feature extraction
         x = self.fea_in(x)
 
@@ -42,4 +43,4 @@ class DRRN(nn.Module):
         # reconstruction
         out = self.reconstruct(out)
 
-        return out
+        return out + identity

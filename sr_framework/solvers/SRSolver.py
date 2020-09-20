@@ -56,7 +56,7 @@ class SRSolver(BaseSolver):
         # set optimizer
         optim_type = self.train_opt['type']
         lr = self.train_opt['learning_rate']
-        weight_decay = train_opt['weight_decay']
+        weight_decay = self.train_opt['weight_decay']
         if optim_type == 'ADAM':
             self.optimizer = optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()), lr=lr, weight_decay=weight_decay)
         elif optim_type == 'SGD':
@@ -125,7 +125,10 @@ class SRSolver(BaseSolver):
                 self.SR = self.model(self.LR)
             
         self.model.train()
-        loss = self.criterion(self.SR, self.HR)
+
+        # In x3 resolution, SR and HR may be not the same resolution
+        h, w = self.SR.shape[2:]
+        loss = self.criterion(self.SR, self.HR[:, :, :h, :w])
         return loss.item()
 
 
@@ -193,7 +196,7 @@ class SRSolver(BaseSolver):
 
         
     def save_checkpoint(self, epoch, is_best):
-        filename = osp.join(self.ckp_path, '{}_ckp.pth'.format(epoch))
+        filename = osp.join(self.ckp_path, 'last_ckp.pth')
         ckp = {
             'state_dict': self.model.state_dict(),
             'epoch': epoch,
@@ -204,7 +207,7 @@ class SRSolver(BaseSolver):
             'train_records': self.train_records,
             'val_records': self.val_records
         }
-        if epoch % self.save_ckp_step:
+        if epoch % self.save_ckp_step == 0:
             torch.save(ckp, filename)
             self.lg.info('Saving last checkpoint to [{}]'.format(filename))
 
@@ -220,6 +223,9 @@ class SRSolver(BaseSolver):
         out['LR'] = (self.LR[0]*255).cpu().clamp(0, 255).round().byte()
         out['SR'] = (self.SR[0]*255).cpu().clamp(0, 255).round().byte()
         out['HR'] = (self.HR[0]*255).cpu().clamp(0, 255).round().byte()
+        #out['LR'] = (self.LR[0]).cpu().clamp(0, 255).round().byte()
+        #out['SR'] = (self.SR[0]).cpu().clamp(0, 255).round().byte()
+        #out['HR'] = (self.HR[0]).cpu().clamp(0, 255).round().byte()
 
         # Numpy HWC
         if need_np:
@@ -233,7 +239,8 @@ class SRSolver(BaseSolver):
     def save_current_visual(self, epoch):
         if (epoch % self.save_visual_step) == 0:
             visuals = self.get_current_visual(need_np=False)
-            visuals_list = [visuals['SR'], visuals['HR']]
+            h, w = visuals['SR'].shape[1:]
+            visuals_list = [visuals['SR'], (visuals['HR'])[:, :h, :w]]
             visual_images = torch.stack(visuals_list)
             visual_images = thutil.make_grid(visual_images, nrow=2, padding=5)
             visual_images = visual_images.permute(1, 2, 0).numpy()

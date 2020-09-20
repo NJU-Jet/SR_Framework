@@ -105,8 +105,36 @@ class CCA(nn.Module):
         return x * atten
 
 class IMDN_Module(nn.Module):
-    def __init__(self, num_fea, skip=True, distill_ratio=0.25):
+    def __init__(self, num_fea, distill_ratio=0.25):
         super(IMDN_Module, self).__init__()
+        self.distilled_channels = int(num_fea * distill_ratio)
+        self.remain_channels = int(num_fea - self.distilled_channels)
+        self.conv1 = nn.Conv2d(num_fea, num_fea, 3, 1, 1)
+        self.conv2 = nn.Conv2d(self.remain_channels, num_fea, 3, 1, 1)
+        self.conv3 = nn.Conv2d(self.remain_channels, num_fea, 3, 1, 1)
+        self.conv4 = nn.Conv2d(self.remain_channels, self.distilled_channels, 3, 1, 1)
+        self.act = nn.LeakyReLU(0.05)
+        self.fuse = nn.Conv2d(num_fea, num_fea, 1, 1, 0)
+        self.cca = CCA(num_fea)
+
+    def forward(self, x):
+        out1 = self.act(self.conv1(x))
+        d1, r1 = torch.split(out1, (self.distilled_channels, self.remain_channels), dim=1)
+        out2 = self.act(self.conv2(r1))
+        d2, r2 = torch.split(out2, (self.distilled_channels, self.remain_channels), dim=1)
+        out3 = self.act(self.conv3(r2))
+        d3, r3 = torch.split(out3, (self.distilled_channels, self.remain_channels), dim=1)
+        d4 = self.act(self.conv4(r3))
+        out = torch.cat([d1, d2, d3, d4], dim=1)
+        out = self.cca(torch.cat([d1, d2, d3, d4], dim=1))
+        out = self.fuse(out)
+
+        return out + x
+
+
+class IMDN_Module1(nn.Module):
+    def __init__(self, num_fea, distill_ratio=0.25):
+        super(IMDN_Module1, self).__init__()
         self.distilled_channels = int(num_fea * distill_ratio)
         self.remain_channels = int(num_fea - self.distilled_channels)
         self.conv1 = nn.Conv2d(num_fea, num_fea, 3, 1, 1)
@@ -116,7 +144,6 @@ class IMDN_Module(nn.Module):
         self.act = nn.LeakyReLU(0.05)
         self.fuse = nn.Conv2d(num_fea, num_fea, 1, 1, 0)
         self.cca = CCA(num_fea)
-        self.skip = skip
 
     def forward(self, x):
         out1 = self.act(self.conv1(x))
@@ -131,7 +158,4 @@ class IMDN_Module(nn.Module):
         out = self.cca(torch.cat([d1, d2, d3, d4], dim=1))
         out = self.fuse(out)
 
-        if self.skip:
-            return out + x
-        else:
-            return out        
+        return out
