@@ -7,9 +7,9 @@ from PIL import Image
 import logging
 import imageio
 
-class Benchmark(Base):
+class TestLRHR(Base):
     def __init__(self, opt):
-        super(Benchmark, self).__init__(opt)
+        super(TestLRHR, self).__init__(opt)
         self.dataroot_hr = opt['dataroot_HR']   
         self.dataroot_lr = opt['dataroot_LR']
         self.scale = opt['scale']

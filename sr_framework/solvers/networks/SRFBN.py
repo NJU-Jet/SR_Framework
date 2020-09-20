@@ -4,8 +4,6 @@ import logging
 from .blocks import MeanShift
 import torch.nn.functional as F
 
-lg = logging.getLogger('Base')
-
 class FeedbackBlock(nn.Module):
     def __init__(self, num_features, num_groups, upscale_factor):
         super(FeedbackBlock, self).__init__()

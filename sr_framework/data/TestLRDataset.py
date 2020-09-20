@@ -4,9 +4,9 @@ import torch
 from .BaseDataset import Base
 from PIL import Image
 
-class LR(Base):
+class TestLR(Base):
     def __init__(self, opt):
-        super(LR, self).__init__(opt)
+        super(TestLR, self).__init__(opt)
         self.dataroot_lr = opt['dataroot_LR']
         self.img_list = sorted(os.listdir(self.dataroot_lr))
 

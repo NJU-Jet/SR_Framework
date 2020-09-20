@@ -2,12 +2,12 @@ import torch.utils.data as data
 import os
 
 def create_dataset(opt):
-    if opt['mode'] == 'LRHR':
-        from .LRHRDataset import LRHR as D
-    elif opt['mode'] == 'LR':
-        from .LRDataset import LR as D
-    elif opt['mode'] == 'Benchmark':
-        from .Benchmark import Benchmark as D
+    if opt['mode'] == 'TrainLRHR':
+        from .TrainLRHRDataset import TrainLRHR as D
+    elif opt['mode'] == 'TestLR':
+        from .TestLRDataset import TestLR as D
+    elif opt['mode'] == 'TestLRHRDataset':
+        from .TestLRHR import TestLRHR as D
     elif opt['mode'] == 'DIV2K':
         from .DIV2KDataset import DIV2KDataset as D
     else:

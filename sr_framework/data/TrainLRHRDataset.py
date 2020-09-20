@@ -10,9 +10,9 @@ sys.path.append('../')
 from utils import rgb2ycbcr
 lg = logging.getLogger('Base')
 
-class LRHR(Base):
+class TrainLRHR(Base):
     def __init__(self, opt):
-        super(LRHR, self).__init__(opt)
+        super(TrainLRHR, self).__init__(opt)
         self.dataroot_hr = opt['dataroot_HR']   
         self.dataroot_lr = opt['dataroot_LR']
         self.filename_path = opt['filename_path']
