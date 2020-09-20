@@ -1,5 +1,16 @@
 # All-super-resolution-models
-## A generic super-resolution framework which implements IMDN, LatticeNet, IDN, CARN, DRCN, EDSR, DRRN, LapSRN, VDSR. Updating...
+## A generic super-resolution framework which implements the following networks
+* IMDN 
+* LatticeNet
+* IDN
+* CARN
+* DRCN
+* EDSR
+* DRRN
+* LapSRN
+* VDSR
+* Updating...
+
 ## Implement some useful functions for article figures. Like the following:
 
 * **1. generate\_best**: Compare your method with other methods and visualize the best patches.
