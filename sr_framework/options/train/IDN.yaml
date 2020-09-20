@@ -59,8 +59,8 @@ solver:
   manual_seed: 0
   num_epochs: 1000
   skip_threshold: 3
-  save_vis_step: 100
-  save_ckp_step: 100
+  save_vis_step: 50
+  save_ckp_step: 1
   val_step: 1
   pretrained: ~
 
