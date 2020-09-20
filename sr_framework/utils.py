@@ -12,9 +12,9 @@ from shutil import get_terminal_size
 import time
 from datetime import datetime
 import numpy as np
-from skimage.measure import compare_ssim
+#from skimage.measure import compare_ssim
 import matplotlib.pyplot as plt
-plt.style.use(['science', 'no-latex'])
+#plt.style.use(['science', 'no-latex'])
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 
@@ -38,6 +38,7 @@ def logger(name, filepath, pretrained=None):
     lg.addHandler(file_hd)
     
     return lg    
+
 
 def generate_train_val(dataroot, prefix, random_sample=False, num=0):
     img_list = sorted(os.listdir(dataroot))
@@ -64,6 +65,7 @@ def generate_train_val(dataroot, prefix, random_sample=False, num=0):
             fp.write(name)
             if i < len(val_list) - 1:
                 fp.write('\n')
+
 
 def rgb2ycbcr(img, only_y=True):
     '''same as matlab rgb2ycbcr
@@ -314,6 +316,7 @@ def sr_forward_time(dataloader, model):
 
 
 if __name__ == '__main__':
+    # modify dataroot according to yout path
     dataroot = '/data/dzc/SISRDataset/DIV2K/DIV2K_train_HR'
     prefix = 'DIV2K'
     generate_train_val(dataroot, prefix, False, num=100)
