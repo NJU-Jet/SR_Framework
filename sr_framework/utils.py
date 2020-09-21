@@ -4,13 +4,11 @@ import cv2
 import math
 import os
 import os.path as osp
-import glob
 import os.path as osp
 import sys
 import random
 from shutil import get_terminal_size
 import time
-from datetime import datetime
 import numpy as np
 #from skimage.measure import compare_ssim
 import matplotlib.pyplot as plt

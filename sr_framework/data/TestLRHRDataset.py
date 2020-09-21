@@ -2,7 +2,6 @@ from .BaseDataset import Base
 import numpy as np
 import os
 import os.path as osp
-import torchvision.transforms as T
 from PIL import Image
 import logging
 import imageio
