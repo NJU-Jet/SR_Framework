@@ -108,7 +108,7 @@ class FeedbackBlock(nn.Module):
 
 
 class SRFBN(nn.Module):
-    def __init__(self, upscale_factor, in_channels, out_channels, num_fea, num_steps, num_groups, act_type='prelu', norm_type=None):
+    def __init__(self, upscale_factor, in_channels, num_fea, out_channels,  num_steps, num_groups, act_type='prelu', norm_type=None):
         super(SRFBN, self).__init__()
         
         if upscale_factor == 2:

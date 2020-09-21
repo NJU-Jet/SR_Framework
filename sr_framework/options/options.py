@@ -28,8 +28,10 @@ def parse(opt):
     for phase, dataset_opt in args['datasets'].items():
         dataset_opt['scale'] = scale
         dataset_opt['split'] = phase
-        dataset_opt['patch_size'] = opt.ps
-        dataset_opt['batch_size'] = opt.bs
+        if opt.ps is not None:
+            dataset_opt['patch_size'] = opt.ps
+        if opt.bs is not None:
+            dataset_opt['batch_size'] = opt.bs
         dataset_opt['train_Y'] = opt.train_Y
         if ('DIV2K' in dataset_opt['dataroot_LR']) or ('TestLRHR' in dataset_opt['dataroot_LR']):
             dataset_opt['dataroot_LR'] = dataset_opt['dataroot_LR'].replace('N', str(opt.scale))        
@@ -41,7 +43,8 @@ def parse(opt):
         args['networks']['out_channels'] = 1
 
     # setting for solver
-    args['solver']['learning_rate'] = opt.lr
+    if opt.lr is not None:
+        args['solver']['learning_rate'] = opt.lr
     
       
     # setting for GPU environment

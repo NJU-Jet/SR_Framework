@@ -1,10 +1,10 @@
 #generate settings
 name: ~
 mode: SR
-gpu_ids: [3]
+gpu_ids: [0]
 
 scale: 2
-patch_size: 96
+patch_size: 48
 train_Y: false
 use_chop: true
 
@@ -31,12 +31,13 @@ datasets:
 
 #networks
 networks:
-  which_model: IMDN
+  which_model: SRFBN
   in_channels: 3
   num_fea: 64
   out_channels: 3
+  num_steps: 4
+  num_groups: 6
   dataparallel: false
-  imdn_blocks: 6
       
 #path to save
 paths:
@@ -50,7 +51,7 @@ paths:
 solver:
   type: ADAM
   init_type: kaiming
-  learning_rate: !!float 2e-4
+  learning_rate: !!float 1e-4
   weight_decay: 0
   lr_scheme: MultiStepLR
   lr_steps: 

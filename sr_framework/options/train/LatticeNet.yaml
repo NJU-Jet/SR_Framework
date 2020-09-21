@@ -50,7 +50,7 @@ paths:
 solver:
   type: ADAM
   init_type: kaiming
-  learning_rate: !!float 8e-4
+  learning_rate: !!float 2e-4
   weight_decay: 0
   lr_scheme: MultiStepLR
   lr_steps: 

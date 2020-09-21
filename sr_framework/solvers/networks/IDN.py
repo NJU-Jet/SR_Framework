@@ -65,23 +65,6 @@ class IDN(nn.Module):
     def __init__(self, upscale_factor=2, in_channels=3, num_fea=64, out_channels=3):
         super(IDN, self).__init__()
 
-        if upscale_factor == 2:
-            stride = 2
-            padding = 2
-            kernel = 6
-        elif upscale_factor == 3:
-            stride = 3
-            padding = 2
-            kernel = 7
-        elif upscale_factor == 4:
-            stride = 4
-            padding = 2
-            kernel = 8
-        elif upscale_factor == 8:
-            stride = 8
-            padding = 2
-            kernel = 12
-
         self.upscale_factor = upscale_factor 
        
         # extract features
@@ -104,15 +87,14 @@ class IDN(nn.Module):
         )
 
         # Reconstruct
-        self.upsample = nn.ConvTranspose2d(num_fea, out_channels, kernel, stride, padding) 
-        '''
+        
         self.upsample = nn.Sequential(
             nn.Conv2d(64, 64, 3, 1, 1),
             nn.Conv2d(64, out_channels * (upscale_factor ** 2), 3, 1, 1),
             nn.PixelShuffle(upscale_factor)
 
         )
-        '''
+        
 
     def forward(self, x):
         inter_res = F.interpolate(x, scale_factor=self.upscale_factor, mode='bicubic', align_corners=False)
