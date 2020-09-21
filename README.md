@@ -1,6 +1,6 @@
 # SR\_Framework
 ## A generic super-resolution framework which implements the following networks (Updating...)
-* LatticeNet [ECCV2020](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123670273.pdf)
+* LatticeNet [[ECCV2020](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123670273.pdf)]
 * IMDN [ACM MM2019](https://www.jianshu.com/p/399e5a3c7cc5) 
 * IDN [CVPR2018](https://openaccess.thecvf.com/content_cvpr_2018/html/Hui_Fast_and_Accurate_CVPR_2018_paper.html)
 * CARN [ECCV2018](https://openaccess.thecvf.com/content_ECCV_2018/html/Namhyuk_Ahn_Fast_Accurate_and_ECCV_2018_paper.html)
