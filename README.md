@@ -1,5 +1,5 @@
 # SR\_Framework
-## A generic super-resolution framework which implements the following networks(Updating...)
+## A generic super-resolution framework which implements the following networks (Updating...)
 * IMDN 
 * LatticeNet
 * IDN
