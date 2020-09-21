@@ -31,3 +31,7 @@ nvidia-smi
 conda env create --f requirements.yaml
 source activate SR
 ```
+If you want to figure out which file includes the libraries(take tensorboardX as an example), you can use:
+```bash
+grep -rn --color=auto 'tensorboardX'
+```
