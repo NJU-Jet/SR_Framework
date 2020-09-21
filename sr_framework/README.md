@@ -21,7 +21,7 @@
     * tqdm          4.48.2
     * matplotlib    3.1.1
 
-I also provide [requirements.yaml](://github.com/NJU-Jet/SR\_Framework/blob/master/sr\_framework/requirements.yaml) for you to copy my conda environment. If you have anaconda, you can use the following codes:
+I also provide [requirements.yaml](github.com/NJU-Jet/SR\_Framework/blob/master/sr\_framework/requirements.yaml) for you to copy my conda environment. If you have anaconda, you can use the following codes:
 * First make sure your nvidia driver version is larger than 410.48
 ```bash
 nvidia-smi
