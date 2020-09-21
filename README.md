@@ -1,5 +1,5 @@
-# All-super-resolution-models
-## A generic super-resolution framework which implements the following networks
+# SR\_Framework
+## A generic super-resolution framework which implements the following networks(Updating...)
 * IMDN 
 * LatticeNet
 * IDN
@@ -9,7 +9,6 @@
 * DRRN
 * LapSRN
 * VDSR
-* Updating...
 
 ## Implement some useful functions for article figures. Like the following:
 
