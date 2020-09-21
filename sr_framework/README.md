@@ -35,3 +35,31 @@ If you want to figure out which file includes the libraries(take tensorboardX as
 ```bash
 grep -rn --color=auto 'tensorboardX'
 ```
+
+# Train on DIV2K
+* Download DIV2K dataset from [EDVR](https://github.com/xinntao/EDVR/blob/master/docs/DatasetPreparation.md#REDS), unpack the tar file to any place you want.
+* Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/train/{model}.yaml```to the place where DIV2K images are located.(change {model} according to your need)
+* Run(change {model} according to your need, --use_chop is for saving memory in validation stage):
+```bash
+python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x2 --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
+```
+
+# Train on your own dataset
+* Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/train/{model}.yaml```to the place where your images are located.(change {model} according to your need)
+* Change ```mode``` in ```options/train/{model}.yaml to ```TrainLRHR```
+* Run(change {model} according to your need, --use_chop is for saving memory in validation stage):
+```bash
+python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x2 --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
+```
+
+# Test on Benchmark(Set5, Set14, B100, Urban100, Mango109)
+* Download benchmark dataset from [EDVR](https://github.com/xinntao/EDVR/blob/master/docs/DatasetPreparation.md#REDS), unpack the tar file to any place you want.
+* Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/test/base.yaml```to the place where benchmark images are located.
+* Run():
+```bash
+python test.py --opt options/test/base.yaml --dataset_name {dataset_name} --scale {scale} --which_model {model} --pretrained {pretrained_path}
+```
+For example:
+```bash
+python test.py --opt options/test/base.yaml --dataset_name Set5 --scale 2 --which_model EDSR --pretrained pretrained/EDSR.pth
+```

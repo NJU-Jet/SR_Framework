@@ -1,18 +1,28 @@
 #generate settings
 mode: SR
-gpu_ids: [0]
+gpu_ids: [2]
 scale: 2
 dataset_name: ~
-calc_cuda_time: true
+calc_cuda_time: false
    
 #datasets
 datasets:
   test:
-    mode: Benchmark
+    mode: TestLRHR
     dataroot_HR: /data/dzc/SISRDataset/benchmark/dataset_name/HR
     dataroot_LR: /data/dzc/SISRDataset/benchmark/dataset_name/LR_bicubic/XN
     
 #networks
 networks:
-  which_model: baseline
+  which_model: IMDN
   pretrained: ~
+  in_channels: 3
+  num_fea: 64
+  out_channels: 3
+  imdn_blocks: 6
+  use_skip: false
+  num_U: 9
+  recurisive_times: 9
+  n_resblocks: 16
+  distill: 16
+  init_value: 0.2
