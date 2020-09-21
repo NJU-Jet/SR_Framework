@@ -46,7 +46,7 @@ python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x
 * Log file will be saved in ```log/{name}.log```
 * Checkpoint and current best weights will be saved in ```experiment/{name}/{epochs}/```
 * Train/Val loss and psnr/ssim will be saved in ```experiment/{name}/records/```
-* Visualization of Train and Validate will be saved in ```../Tensorboard```
+* Visualization of Train and Validate will be saved in ```../Tensorboard/{name}/```
 
 
 # Train on your own dataset
@@ -56,6 +56,10 @@ python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x
 ```bash
 python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x2 --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
 ```
+* Log file will be saved in ```log/{name}.log```
+* Checkpoint and current best weights will be saved in ```experiment/{name}/{epochs}/```
+* Train/Val loss and psnr/ssim will be saved in ```experiment/{name}/records/```
+* Visualization of Train and Validate will be saved in ```../Tensorboard/{name}/```
 
 # Test on Benchmark(Set5, Set14, B100, Urban100, Mango109)
 1. Download benchmark dataset from [EDVR](https://github.com/xinntao/EDVR/blob/master/docs/DatasetPreparation.md#REDS), unpack the tar file to any place you want.
@@ -67,5 +71,5 @@ python test.py --opt options/test/base.yaml --dataset_name {dataset_name} --scal
 For example:
 ```bash
 python test.py --opt options/test/base.yaml --dataset_name Set5 --scale 2 --which_model EDSR --pretrained pretrained/EDSR.pth
-``
-* Psnr & ssim of each image will be printed on your screen.`
+```
+* Psnr & ssim of each image will be printed on your screen.
