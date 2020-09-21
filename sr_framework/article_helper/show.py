@@ -10,6 +10,7 @@ import math
 plt.rcParams['pdf.fonttype'] = 42
 plt.rcParams['ps.fonttype'] = 42
 
+
 def default_ax(ax):
     ax.set_xticks([])
     ax.set_yticks([])
@@ -18,8 +19,50 @@ def default_ax(ax):
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
 
+
+def show_feature_map(img, save_path):
+    plt.figure()
+    
+    '''axis'''
+    plt.axis('off')
+    plt.xticks([])
+    plt.yticks([])
+
+    plt.imshow(img)
+    plt.colorbar()
+    plt.savefig(save_path)
+    plt.close()
+
+
+def show_relation(t1, t2, t3, c4, save_path):
+    plt.figure()
+    x = np.arange(4)
+    total_width, n = 0.8, 4
+    width = total_width / n
+    x = x - (total_width - width) / 2
+    plt.bar(x, t1, color='lime', width=width, label='$F_{NLT}^0$')
+    plt.bar(x + width, t2, color='orangered', width=width, label='$F_{NLT}^1$')
+    plt.bar(x + 2*width, t3, color='darkmagenta', width=width, label='$F_{NLT}^2$')
+    plt.bar(x + 3*width, c4, color='blue', width=width, label='$F_B^4$')
+
+    plt.legend(loc='best', fontsize='x-small', frameon=True)
+    group_names = ['FTB1', 'FTB2', 'FTB3', 'FTB4']
+    plt.xticks([0, 1, 2, 3], group_names)
+    plt.ylabel('Average absolute filter weights')
+    plt.savefig(save_path)
+    plt.close()
+
+
+def show_frequency(x, y, save_path):
+    plt.figure()
+    plt.xlabel('Low Frequency  ->  High Frequency')
+    plt.ylabel('Spectral densities')
+    plt.plot(x, y, marker = 'o', markerfacecolor='r', markersize=3.0)
+    plt.savefig(save_path)
+    plt.close()
+
  
-def plot(imgs, psnrs, ssims, index, save_basename, labels):
+def plot_compare(imgs, psnrs, ssims, index, save_basename, labels):
     dirname1 = osp.join('best', 'png_{:03d}'.format(index))
     dirname2 = osp.join('best', 'pdf_{:03d}'.format(index))
     

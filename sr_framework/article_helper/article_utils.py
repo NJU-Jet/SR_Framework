@@ -6,8 +6,70 @@ import os.path as osp
 import sys
 sys.path.append('../')
 from utils import calc_metrics
-from .show import plot
+from .show import *
 from tqdm import tqdm, trange
+
+
+def relation():
+    t1 = [1, 2, 3, 4]
+    t2 = [2, 3, 4, 5]
+    t3 = [3, 4, 5, 6]
+    c4 = [4, 5, 6, 7]
+    
+    show_relation(t1, t2, t3, c4, save_path='relation.png')
+
+
+def feature_map(tensor):
+    numpy_array = tensor.squeeze().cpu().numpy()
+    arr = np.mean(numpy_array, axis=0)
+
+    show_feature_map(arr, save_path='feature_map.png')
+
+
+# calculate 1-D spectral densities
+def Frequency_analysis(image):
+
+    # Fourier Transform
+    fft_res = np.abs(np.fft.fft2(image))
+
+    # Center
+    fft_res = np.fft.fftshift(fft_res)
+    
+    h, w = fft_res.shape
+    fft_res = np.pad(fft_res, pad_width=((0, (h+1)%2), (0, (w+1)%2)), mode='constant', constant_values=0)
+    h, w = fft_res.shape
+    if h > w:
+        pad = h - w
+        fft_res = np.pad(fft_res, pad_width=((0, 0), (pad//2, pad//2)), mode='constant', constant_values=0)
+    elif w > h:
+        pad = w - h
+        fft_res = np.pad(fft_res, pad_width=((pad//2, pad//2), (0, 0)), mode='constant', constant_values=0)
+
+    h, w = fft_res.shape
+    if h!= w:
+        raise ValueError('')
+
+    max_range = h // 2
+    cy, cx = h//2, w//2
+    x, y = [], []
+    for r in range(max_range):
+        x.append(r)
+        f = 0.0
+        if r == 0:
+            f = fft_res[cy, cx]
+        else:
+            f += sum(fft_res[cy-r, cx-r:cx+r])
+            f += sum(fft_res[cy-r:cy+r, cx+r])
+            f += sum(fft_res[cy+r, cx+r:cx-r:-1])
+            f += sum(fft_res[cy+r:cy-r:-1, cx-r])
+        y.append(np.log(1+f))
+
+    # Normalize frequency to [0, 1]
+    max_freq = np.max(x)
+    x = x / max_freq
+    
+    show_feature_map(x, y, save_path='freq.png')
+
 
 def get_direction(x, y, w, h):
     left, right, top, bottom = 0, 0, 0, 0
@@ -110,7 +172,7 @@ def generate_best(dir_list, border=4):
                 print('[{:03d}] | ({}/{}, {}/{}) | {}'.format((i+1), y, h, x, w, str_psnrs))
                 if np.argmax(np.array(psnrs)) == length-2 and np.argmax(np.array(ssims)) == length-2:
                     print('Saving...')
-                    plot(imgs, img_psnrs, img_ssims, i+1, '{}_{}'.format(y, x), dir_list)
+                    plot_compare(imgs, img_psnrs, img_ssims, i+1, '{}_{}'.format(y, x), dir_list)
 
 
 if __name__ == '__main__':
