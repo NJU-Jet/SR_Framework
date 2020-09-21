@@ -38,7 +38,7 @@ grep -rn --color=auto 'tensorboardX'
 
 # Train on DIV2K
 1. Download DIV2K dataset from [EDVR](https://github.com/xinntao/EDVR/blob/master/docs/DatasetPreparation.md#REDS), unpack the tar file to any place you want.
-2. Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/train/{model}.yaml```to the place where DIV2K images are located.(change {model} according to your need)
+2. Change ```dataroot_HR``` and ```dataroot_LR``` arguments in ```options/train/{model}.yaml``` to the place where DIV2K images are located.(change {model} according to your need)
 3. Run(change {model} according to your need, --use_chop is for saving memory in validation stage):
 ```bash
 python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x2 --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
@@ -50,7 +50,7 @@ python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x
 
 
 # Train on your own dataset
-1. Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/train/{model}.yaml```to the place where your images are located.(change {model} according to your need)
+1. Change ```dataroot_HR``` and ```dataroot_LR``` arguments in ```options/train/{model}.yaml``` to the place where your images are located.(change {model} according to your need)
 2. Change ```mode``` argument in ```options/train/{model}.yaml``` to ```TrainLRHR```
 3. Run(change {model} according to your need, --use_chop is for saving memory in validation stage):
 ```bash
@@ -63,7 +63,7 @@ python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x
 
 # Test on Benchmark(Set5, Set14, B100, Urban100, Mango109)
 1. Download benchmark dataset from [EDVR](https://github.com/xinntao/EDVR/blob/master/docs/DatasetPreparation.md#REDS), unpack the tar file to any place you want.
-2. Change ```dataroot_HR```and```dataroot_LR``` arguments in ```options/test/base.yaml```to the place where benchmark images are located.
+2. Change ```dataroot_HR``` and ```dataroot_LR``` arguments in ```options/test/base.yaml``` to the place where benchmark images are located.
 3. Run:
 ```bash
 python test.py --opt options/test/base.yaml --dataset_name {dataset_name} --scale {scale} --which_model {model} --pretrained {pretrained_path}
