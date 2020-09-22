@@ -47,7 +47,8 @@ You can also use the dafault setting which keeps the same with the original arti
 ```bash
 python train.py --opt options/train/{model}.yaml --name {name} --scale {scale} --gpu_ids {ids}
 ```
-Note: gpu_ids can be a series of numbers separated by comma, like ```0,1,3```
+Note: ```gpu_ids``` can be a series of numbers separated by comma, like ```0,1,3```.
+The argument ```--name``` specifies the following save path:
 * Log file will be saved in ```log/{name}.log```
 * Checkpoint and current best weights will be saved in ```experiment/{name}/{epochs}/```
 * Train/Val loss and psnr/ssim will be saved in ```experiment/{name}/records/```
