@@ -41,8 +41,13 @@ grep -rn --color=auto 'tensorboardX'
 2. Change ```dataroot_HR``` and ```dataroot_LR``` arguments in ```options/train/{model}.yaml``` to the place where DIV2K images are located.(change {model} according to your need)
 3. Run(change {model} according to your need, --use_chop is for saving memory in validation stage):
 ```bash
-python train.py --opt options/train/{model}.yaml --name {model}_bs16ps64lr2e-4_x2 --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
+python train.py --opt options/train/{model}.yaml --name {name} --scale 2 --lr 2e-4 --bs 16 --ps 64 --gpu_ids 0 --use_chop
 ```
+You can also use the dafault setting which keeps the same with the original article by running:
+```bash
+python train.py --opt options/train/{model}.yaml --name {name} --scale {scale} --gpu_ids {ids}
+```
+Note: gpu_ids can be a series of numbers separated by comma, like ```0,1,3```
 * Log file will be saved in ```log/{name}.log```
 * Checkpoint and current best weights will be saved in ```experiment/{name}/{epochs}/```
 * Train/Val loss and psnr/ssim will be saved in ```experiment/{name}/records/```
