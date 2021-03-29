@@ -20,8 +20,8 @@ def main():
     parser.add_argument('--opt', type=str, required=True, help='path to json or yaml file')
     parser.add_argument('--name', type=str, required=True, help='save_dir prefix name')
     parser.add_argument('--scale', type=int, required=True, help='scale factor')
-    parser.add_argument('--ps', type=int, default=None, help='patch size')
-    parser.add_argument('--bs', type=int, default=None, help='batch_size')
+    parser.add_argument('--ps', type=int, default=64, help='patch size')
+    parser.add_argument('--bs', type=int, default=16, help='batch_size')
     parser.add_argument('--lr', type=float, default=None, help='learning rate')
     parser.add_argument('--train_Y', action='store_true', default=False, help='convert rgb to yuv and only train on Y channel')
     parser.add_argument('--gpu_ids', type=str, default=None, help='which gpu to use')
@@ -33,29 +33,14 @@ def main():
 
     # Tensorboard curve
     pretrained = args['solver']['pretrained']
-    train_path = '../Tensorboard/train_{}'.format(args['name'])
-    val_path = '../Tensorboard/val_{}'.format(args['name'])
-    psnr_path = '../Tensorboard/psnr_{}'.format(args['name'])
-    ssim_path = '../Tensorboard/ssim_{}'.format(args['name'])
+    tensorboard_path = 'Tensorboard/{}'.format(args['name'])
     
     if pretrained is None:
-        if osp.exists(train_path):
-            lg.info('Remove dir: [{}]'.format(train_path))
-            shutil.rmtree(train_path, True)
-        if osp.exists(val_path):
-            lg.info('Remove dir: [{}]'.format(val_path))
-            shutil.rmtree(val_path, True)
-        if osp.exists(psnr_path):
-            lg.info('Remove dir: [{}]'.format(psnr_path))
-            shutil.rmtree(psnr_path, True)
-        if osp.exists(ssim_path):
-            lg.info('Remove dir: [{}]'.format(ssim_path))
-            shutil.rmtree(ssim_path, True)
+        if osp.exists(tensorboard_path):
+            lg.info('Remove dir: [{}]'.format(tensorboard_path))
+            shutil.rmtree(tensorboard_path, True)
             
-    train_writer = SummaryWriter(train_path)
-    val_writer = SummaryWriter(val_path)
-    psnr_writer = SummaryWriter(psnr_path)
-    ssim_writer = SummaryWriter(ssim_path)    
+    writer = SummaryWriter(tensorboard_path)
 
     # random seed
     seed = args['solver']['manual_seed']
@@ -109,7 +94,7 @@ def main():
                 lg.info('Epoch: {:4} | iter: {:3} | train_loss: {:.4f} | lr: {}'.format(epoch, iter, iter_loss, solver.get_current_learning_rate()))
 
         train_loss = round(sum(train_loss_list) / len(train_loss_list), 4)
-        train_writer.add_scalar('loss', train_loss, epoch)
+        writer.add_scalar('X{}/train_loss'.format(args['scale']), train_loss, epoch)
         solver_log['train_records']['train_loss'].append(train_loss)
         solver_log['train_records']['lr'].append(solver.get_current_learning_rate())
 
@@ -141,9 +126,9 @@ def main():
             avg_psnr = round(sum(psnr_list) / len(psnr_list), 2)
             avg_ssim = round(sum(ssim_list) / len(ssim_list), 4)
             val_loss = round(sum(val_loss_list) / len(val_loss_list), 4)
-            val_writer.add_scalar('loss', val_loss, epoch)
-            psnr_writer.add_scalar('psnr', avg_psnr, epoch)
-            ssim_writer.add_scalar('ssim', avg_ssim, epoch)
+            writer.add_scalar('X{}/val_loss'.format(args['scale']), val_loss, epoch)
+            writer.add_scalar('X{}/psnr'.format(args['scale']), avg_psnr, epoch)
+            writer.add_scalar('X{}/ssim'.format(args['scale']), avg_ssim, epoch)
 
             solver_log['val_records']['val_loss'].append(val_loss)
             solver_log['val_records']['psnr'].append(avg_psnr)

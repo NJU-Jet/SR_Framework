@@ -44,8 +44,8 @@ class DIV2KDataset(Base):
         base, ext = osp.splitext(self.img_list[idx])
         lr_basename = base + 'x{}'.format(self.scale) + ext
         lr_path = osp.join(self.dataroot_lr, lr_basename)
-        hr = np.array(Image.open(hr_path))
-        lr = np.array(Image.open(lr_path))
+        hr = self.load_img(hr_path)
+        lr = self.load_img(lr_path)
 
         if self.noise is not None:
             lr = self.add_noise(lr, self.noise['type'], self.noise['value'])

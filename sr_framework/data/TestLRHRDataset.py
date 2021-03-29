@@ -24,8 +24,8 @@ class TestLRHR(Base):
     def __getitem__(self, idx):
         hr_path = osp.join(self.dataroot_hr, self.hr_img_list[idx])
         lr_path = osp.join(self.dataroot_lr, self.lr_img_list[idx])
-        hr = imageio.imread(hr_path, pilmode='RGB')
-        lr = imageio.imread(lr_path, pilmode='RGB')
+        hr = self.load_img(hr_path)
+        lr = self.load_img(lr_path)
 
         data = {}
         lr ,hr = self.np2tensor(lr), self.np2tensor(hr)

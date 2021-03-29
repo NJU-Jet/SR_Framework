@@ -22,10 +22,11 @@ datasets:
     noise: ~
     enlarge_times: 20
   val:
-    mode: DIV2K
-    dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
-    dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
-    filename_path: data/DIV2K_val.txt
+    mode: TestLRHR
+    #dataroot_HR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_HR
+    #dataroot_LR: /data/dzc/SISRDataset/DIV2K/DIV2K_train_LR_bicubic/XN
+    dataroot_HR: /data/dzc/SISRDataset/benchmark/Set5/HR
+    dataroot_LR: /data/dzc/SISRDataset/benchmark/Set5/LR_bicubic/XN
     noise: ~
     enlarge_times: 1
 

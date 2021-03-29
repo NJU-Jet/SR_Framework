@@ -1,7 +1,7 @@
 **About different dataset**
 * BaseDataset:      Common functions for preprocessing data.
     * np2tensor:    Convert numpy data from HWC[0: 255] to CHW[0: 1].
-    * augment:      Randomly vertical flip, horizontal flip and 90 rorate data. 
+    * augment:      Randomly vertical flip, horizontal flip and 90 rotate data. 
     * get\_patch:   Randomly crop a patch.
     * add\_noise:   Add gaussion or possion noise. 
 * DIV2KDataset:     Train or validate on DIV2K.

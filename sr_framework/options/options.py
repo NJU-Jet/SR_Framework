@@ -33,7 +33,7 @@ def parse(opt):
         if opt.bs is not None:
             dataset_opt['batch_size'] = opt.bs
         dataset_opt['train_Y'] = opt.train_Y
-        if ('DIV2K' in dataset_opt['dataroot_LR']) or ('TestLRHR' in dataset_opt['dataroot_LR']):
+        if 'XN' in dataset_opt['dataroot_LR']:
             dataset_opt['dataroot_LR'] = dataset_opt['dataroot_LR'].replace('N', str(opt.scale))        
 
     # setting for networks

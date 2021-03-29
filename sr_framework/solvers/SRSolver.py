@@ -5,7 +5,6 @@ import torch.nn as nn
 import torch.optim as optim
 from .BaseSolver import BaseSolver
 from .networks import create_model
-from .networks import baseline
 import logging
 import os
 import os.path as osp

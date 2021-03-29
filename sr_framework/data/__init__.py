@@ -6,8 +6,8 @@ def create_dataset(opt):
         from .TrainLRHRDataset import TrainLRHR as D
     elif opt['mode'] == 'TestLR':
         from .TestLRDataset import TestLR as D
-    elif opt['mode'] == 'TestLRHRDataset':
-        from .TestLRHR import TestLRHR as D
+    elif opt['mode'] == 'TestLRHR':
+        from .TestLRHRDataset import TestLRHR as D
     elif opt['mode'] == 'DIV2K':
         from .DIV2KDataset import DIV2KDataset as D
     else:

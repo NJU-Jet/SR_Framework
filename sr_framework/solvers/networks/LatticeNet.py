@@ -39,11 +39,11 @@ class LBlock(nn.Module):
         super(LBlock, self).__init__()
         self.H_conv = nn.Sequential(
             nn.Conv2d(num_fea, 48, 3, 1, 1),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.05),
             nn.Conv2d(48, 48, 3, 1, 1),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.05),
             nn.Conv2d(48, num_fea, 3, 1, 1),
-            nn.ReLU(inplace=True)
+            nn.LeakyReLU(0.05),
         )
 
         self.A1_coff_conv = CoffConv(num_fea)
@@ -51,11 +51,11 @@ class LBlock(nn.Module):
 
         self.G_conv = nn.Sequential(
             nn.Conv2d(num_fea, 48, 3, 1, 1),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.05),
             nn.Conv2d(48, 48, 3, 1, 1),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(0.05),
             nn.Conv2d(48, num_fea, 3, 1, 1),
-            nn.ReLU(inplace=True)
+            nn.LeakyReLU(0.05),
         )
 
         self.A2_coff_conv = CoffConv(num_fea)
@@ -91,16 +91,17 @@ class BFModule(nn.Module):
         self.conv2 = nn.Conv2d(num_fea, num_fea//2, 1, 1,0)        
         self.fuse32 = nn.Conv2d(num_fea, num_fea//2, 1, 1, 0)
         self.conv1 = nn.Conv2d(num_fea, num_fea//2, 1, 1, 0)
-        self.fuse21 = nn.Conv2d(num_fea, num_fea, 1, 1, 0)
+
+        self.act = nn.ReLU(inplace=True)
 
     def forward(self, x_list):
-        H4 = self.conv4(x_list[3])
-        H3_half = self.conv3(x_list[2])
+        H4 = self.act(self.conv4(x_list[3]))
+        H3_half = self.act(self.conv3(x_list[2]))
         H3 = self.fuse43(torch.cat([H4, H3_half], dim=1))      
-        H2_half = self.conv2(x_list[1])  
+        H2_half = self.act(self.conv2(x_list[1]))
         H2 = self.fuse32(torch.cat([H3, H2_half], dim=1))
-        H1_half = self.conv1(x_list[0])
-        H1 = self.fuse21(torch.cat([H2, H1_half], dim=1))
+        H1_half = self.act(self.conv1(x_list[0]))
+        H1 = torch.cat([H2, H1_half], dim=1)
 
         return H1
         
@@ -108,8 +109,8 @@ class BFModule(nn.Module):
 class LatticeNet(nn.Module):
     def __init__(self, upscale_factor=2, in_channels=3, num_fea=64, out_channels=3, num_LBs=4):
         super(LatticeNet, self).__init__()
-        #self.sub_mean = MeanShift()
-        #self.add_mean = MeanShift(sign=1)
+        self.sub_mean = MeanShift()
+        self.add_mean = MeanShift(sign=1)
         self.num_LBs = num_LBs
 
         # feature extraction
@@ -129,12 +130,13 @@ class LatticeNet(nn.Module):
 
         # Reconstruction
         self.upsample = nn.Sequential(
-            nn.Conv2d(num_fea, out_channels * (upscale_factor**2), 1, 1, 0),
+            nn.Conv2d(num_fea, num_fea, 3, 1, 1),
+            nn.Conv2d(num_fea, out_channels * (upscale_factor**2), 3, 1, 1),
             nn.PixelShuffle(upscale_factor)
         )
 
     def forward(self, x):
-        #x = self.sub_mean(x)
+        x = self.sub_mean(x)
 
         # feature extraction
         fea = self.fea_conv(x)    
@@ -152,6 +154,6 @@ class LatticeNet(nn.Module):
         # reconstruct
         out = self.upsample(H + fea)
 
-        #out = self.add_mean(out)
+        out = self.add_mean(out)
 
         return out

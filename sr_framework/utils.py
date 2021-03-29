@@ -26,7 +26,7 @@ def logger(name, filepath, pretrained=None):
 
     lg = logging.getLogger(name)
     lg.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s | %(filename)s[%(lineno)d] | %(message)s', datefmt='%H:%M:%S')
+    formatter = logging.Formatter('%(asctime)s |[%(lineno)03d]%(filename)-11s | %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     stream_hd = logging.StreamHandler()
     stream_hd.setFormatter(formatter)
     lg.addHandler(stream_hd)
@@ -89,7 +89,7 @@ def rgb2ycbcr(img, only_y=True):
     return rlt.astype(in_img_type)
 
 
-def calc_metrics(img1, img2, crop_border, test_Y=False):
+def calc_metrics(img1, img2, crop_border, test_Y=True):
     #
     img1 = img1 / 255.
     img2 = img2 / 255.

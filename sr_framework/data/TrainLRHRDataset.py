@@ -35,8 +35,8 @@ class TrainLRHR(Base):
     def __getitem__(self, idx):
         hr_path = osp.join(self.dataroot_hr, self.img_list[idx])
         lr_path = osp.join(self.dataroot_lr, self.img_list[idx])
-        hr = np.array(Image.open(hr_path))
-        lr = np.array(Image.open(lr_path))
+        hr = self.load_img(hr_path)
+        lr = self.load_img(lr_path)
 
         if self.noise is not None:
             lr = self.add_noise(lr, self.noise['type'], self.noise['value'])

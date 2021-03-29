@@ -15,7 +15,7 @@ class TestLR(Base):
 
     def __getitem__(self, idx):
         lr_path = osp.join(self.dataroot_lr, self.img_list[idx])
-        lr = np.array(Image.open(lr_path))
+        lr = self.load_img(lr_path)
         lr = self.np2tensor(lr)
 
         return lr        
