@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from .blocks import MeanShift, std
 import torch.nn.functional as F
+from torchsummaryX import summary
 
 class CoffConv(nn.Module):
     def __init__(self, num_fea):
@@ -157,3 +158,10 @@ class LatticeNet(nn.Module):
         out = self.add_mean(out)
 
         return out
+
+if __name__ == '__main__':
+# 777K, 43.6G
+    s = 4
+    model = LatticeNet(upscale_factor=s).to('cuda')
+    in_ = torch.randn(1, 3, round(720/s), round(1280/s)).to('cuda')
+    summary(model, in_)
