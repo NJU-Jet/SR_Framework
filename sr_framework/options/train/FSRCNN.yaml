@@ -30,11 +30,12 @@ datasets:
 
 #networks
 networks:
-  which_model: EDSR
+  which_model: FSRCNN
   in_channels: 3
-  num_fea: 64
   out_channels: 3
-  n_resblocks: 16
+  d: 56
+  s: 12
+  m: 4
   dataparallel: false
       
 #path to save

@@ -160,7 +160,7 @@ class LatticeNet(nn.Module):
         return out
 
 if __name__ == '__main__':
-# 777K, 43.6G
+    # 777K, 43.6G
     s = 4
     model = LatticeNet(upscale_factor=s).to('cuda')
     in_ = torch.randn(1, 3, round(720/s), round(1280/s)).to('cuda')

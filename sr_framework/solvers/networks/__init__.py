@@ -8,8 +8,7 @@ from .VDSR import VDSR
 from .DRRN import DRRN
 from .DRCN import DRCN
 from .LatticeNet import LatticeNet
-import torch
-import torch.nn as nn
+from .FSRCNN import FSRCNN
 
 def create_model(opt):
     which_model = opt['which_model']
@@ -33,6 +32,8 @@ def create_model(opt):
         model = DRRN(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['out_channels'], opt['num_U'])
     elif which_model == 'DRCN':
         model = DRCN(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['out_channels'], opt['recurisive_times'])
+    elif which_model == 'FSRCNN':
+        model = FSRCNN(opt['upscale_factor'], opt['in_channels'], opt['out_channels'], opt['d'], opt['s'], opt['m'])
     else:
         raise NotImplementedError('unrecognized model: {}'.format(which_model))
 

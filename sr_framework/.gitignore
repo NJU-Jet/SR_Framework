@@ -1,0 +1,11 @@
+# checkpoint
+Tensorboard
+log
+experiment
+
+# data
+DIV2K
+benchmark
+
+# complied files
+__pycache__/
