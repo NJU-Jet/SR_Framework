@@ -1,9 +1,8 @@
 import torch
 import torch.nn as nn
 from torch.nn import init
-from torchsummaryX import summary
+from torchsummary import summary
 import functools
-from torchprofile import profile_macs as profile
 
 class BaseSolver(object):
     def __init__(self, opt):
@@ -34,17 +33,13 @@ class BaseSolver(object):
         rand_input = torch.randn(1, 3, 240, 360).to(self.device)
         summary(network, rand_input)
 
-    def count_parameters(self, network):
-        count = sum([x.numel() for x in network.parameters()])
+    def count_parameters(self):
+        height = round(720 / self.scale)
+        weight = round(1280 / self.scale)
+        in_ = torch.randn(1, 3, height, weight).to(self.device)
+        params, GFlops = summary(self.model, in_)
 
-        width = 720 // self.scale
-        height = 1280 // self.scale
-        in_channels = 1 if self.train_Y else 3  
-        # count GFlops
-        inputs = torch.randn(1, in_channels, height, width).to(self.device)
-        macs = profile(self.model, inputs)
-
-        return count, macs
+        return params, GFlops
 
 
     def init_weight(self, model, init_type='kaiming', scale=1, std=0.02):

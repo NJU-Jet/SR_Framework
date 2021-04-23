@@ -79,7 +79,7 @@ class SRSolver(BaseSolver):
 
         # Network sumary
         #self.summary_network(self.model)
-        num_pra, GF = self.count_parameters(self.model)
+        num_pra, GF = self.count_parameters()
         self.lg.info('Total parameters: [{:.3f}M], GFlops: [{:.4f}G]'.format(num_pra / 1e6, GF / 1e9))
 
         # Init network or load network
@@ -178,8 +178,11 @@ class SRSolver(BaseSolver):
         pretrained = self.train_opt['pretrained']
         init_type = self.train_opt['init_type']
         if pretrained is None:
-            self.lg.info('Init model weights using [{}] init...'.format(init_type))
-            self.init_weight(self.model, init_type=init_type)
+            if init_type is None:
+                self.lg.info('Training from random state ...')
+            else:
+                self.lg.info('Init model weights using [{}] init...'.format(init_type))
+                self.init_weight(self.model, init_type=init_type)
         else:
             # resume from checkpoint
             self.lg.info('Resume from [{}]...'.format(pretrained))

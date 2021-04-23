@@ -5,11 +5,14 @@
 * SRFBN [[CVPR2019](https://openaccess.thecvf.com/content_CVPR_2019/html/Li_Feedback_Network_for_Image_Super-Resolution_CVPR_2019_paper.html)]
 * IDN [[CVPR2018](https://openaccess.thecvf.com/content_cvpr_2018/html/Hui_Fast_and_Accurate_CVPR_2018_paper.html)]
 * CARN [[ECCV2018](https://openaccess.thecvf.com/content_ECCV_2018/html/Namhyuk_Ahn_Fast_Accurate_and_ECCV_2018_paper.html)]
+* RCAN [[ECCV2018](https://github.com/yulunzhang/RCAN)]
+* MemNet [[ICCV2017](https://github.com/tyshiwo/MemNet)]
 * EDSR [[CVPR2017](https://arxiv.org/abs/1707.02921)]
 * DRRN [[CVPR2017](https://openaccess.thecvf.com/content_cvpr_2017/html/Tai_Image_Super-Resolution_via_CVPR_2017_paper.html)]
 * LapSRN [[CVPR2017](http://vllab.ucmerced.edu/wlai24/LapSRN/)]
 * DRCN [[CVPR2016](https://arxiv.org/abs/1511.04491)]
 * VDSR [[CVPR2016](https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Kim_Accurate_Image_Super-Resolution_CVPR_2016_paper.html)]
+* FSRCNN [[ECCV 2016](https://arxiv.org/pdf/1608.00367.pdf)]
 
 ## Implement some useful functions for article figures. Like the following:
 
