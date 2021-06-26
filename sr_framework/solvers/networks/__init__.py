@@ -11,6 +11,8 @@ from .LatticeNet import LatticeNet
 from .FSRCNN import FSRCNN
 from .RCAN import RCAN
 from .MemNet import MemNet
+from .RFDN import RFDN
+from .DLSR import DLSR
 
 def create_model(opt):
     which_model = opt['which_model']
@@ -40,6 +42,10 @@ def create_model(opt):
         model = RCAN(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['out_channels'], opt['num_RGs'], opt['num_RCABs'])
     elif which_model == 'MemNet':
         model = MemNet(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['out_channels'], opt['num_memblock'], opt['num_resblock'])
+    elif which_model == 'RFDN':
+        model = RFDN(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['num_blocks'], opt['out_channels'])
+    elif which_model == 'DLSR':
+        model = DLSR(opt['upscale_factor'], opt['in_channels'], opt['num_fea'], opt['out_channels'])
     else:
         raise NotImplementedError('unrecognized model: {}'.format(which_model))
 
