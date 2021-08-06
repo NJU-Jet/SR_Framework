@@ -1,7 +1,7 @@
 # SR\_Framework
 ## A generic super-resolution framework which implements the following networks (Updating...)
 * DLSR [[Differentiable architecture search](https://arxiv.org/pdf/2105.03939.pdf)]
-* RFDN [[AIM20 Champion](https://arxiv.org/abs/2009.11551)
+* RFDN [[AIM20 Champion](https://arxiv.org/abs/2009.11551)]
 * LatticeNet [[ECCV2020](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123670273.pdf)]
 * IMDN [[ACM MM2019](https://dl.acm.org/doi/abs/10.1145/3343031.3351084)] 
 * SRFBN [[CVPR2019](https://openaccess.thecvf.com/content_CVPR_2019/html/Li_Feedback_Network_for_Image_Super-Resolution_CVPR_2019_paper.html)]
